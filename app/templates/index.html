@@ -3,28 +3,123 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Chatbot</title>
+    <title>Gemini Chatbot</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+        }
+        #chat-box {
+            flex-grow: 1;
+            padding: 10px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            margin: 10px;
+        }
+        .message {
+            margin-bottom: 10px;
+        }
+        .user-message {
+            text-align: right;
+        }
+        .bot-message {
+            text-align: left;
+        }
+        #input-area {
+            display: flex;
+            padding: 10px;
+        }
+        #user-input {
+            flex-grow: 1;
+            padding: 10px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+        }
+        #send-button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
     <h1>Welcome to the AI Chatbot!</h1>
-    <button onclick="startNewChat()">New Chat</button>
+    <div id="chat-box">
+        <!-- Chat messages will be displayed here -->
+    </div>
+    <div id="input-area">
+        <input type="text" id="user-input" placeholder="Type your message...">
+        <button id="send-button">Send</button>
+    </div>
 
     <script>
-        function startNewChat() {
-            const userMessage = prompt("Enter your message:");
-            if (userMessage) {
-                fetch('/chat', {
+        const chatBox = document.getElementById('chat-box');
+        const userInput = document.getElementById('user-input');
+        const sendButton = document.getElementById('send-button');
+
+        // Function to display a message in the chat box
+        function displayMessage(message, isUser) {
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            messageElement.classList.add(isUser ? 'user-message' : 'bot-message');
+            messageElement.textContent = message;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to the bottom
+        }
+
+        // Function to fetch chat history
+        function fetchChatHistory() {
+            fetch('/chat_history')
+                .then(response => response.json())
+                .then(data => {
+                    chatBox.innerHTML = ''; // Clear previous messages
+                    data.chat_history.forEach(message => {
+                        displayMessage(message.text, message.is_user);
+                    });
+                })
+                .catch(error => console.error('Error fetching chat history:', error));
+        }
+
+        // Function to send a new message
+        function sendMessage() {
+            const messageText = userInput.value.trim();
+            if (messageText) {
+                displayMessage(messageText, true); // Display user message immediately
+                userInput.value = ''; // Clear input field
+
+                fetch('/api/chat', { // Use the updated route /api/chat
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ message: userMessage })
+                    body: JSON.stringify({ message: messageText })
                 })
                 .then(response => response.json())
-                .then(data => alert("Chatbot response: " + data.response))
-                .catch(error => console.error('Error:', error));
+                .then(data => {
+                    displayMessage(data.response, false); // Display bot response
+                })
+                .catch(error => {
+                    console.error('Error sending message:', error);
+                    displayMessage('Error: Could not get a response.', false); // Display error message
+                });
             }
         }
+
+        // Event listeners
+        sendButton.addEventListener('click', sendMessage);
+        userInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Fetch chat history when the page loads
+        fetchChatHistory();
     </script>
 </body>
 </html>
