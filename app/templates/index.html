@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chatbot</title>
+</head>
+<body>
+    <h1>Welcome to the AI Chatbot!</h1>
+    <button onclick="startNewChat()">New Chat</button>
+
+    <script>
+        function startNewChat() {
+            const userMessage = prompt("Enter your message:");
+            if (userMessage) {
+                fetch('/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: userMessage })
+                })
+                .then(response => response.json())
+                .then(data => alert("Chatbot response: " + data.response))
+                .catch(error => console.error('Error:', error));
+            }
+        }
+    </script>
+</body>
+</html>
