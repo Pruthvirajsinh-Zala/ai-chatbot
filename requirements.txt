@@ -6,4 +6,5 @@ numpy==1.21.2
 tensorflow==2.6.0
 transformers==4.11.3
 torch==1.9.0
+google-generativeai
 gunicorn==20.1.0
