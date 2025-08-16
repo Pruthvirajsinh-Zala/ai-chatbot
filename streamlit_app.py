@@ -57,7 +57,7 @@ def render_home_page():
     
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        st.image("https://via.placeholder.com/400x200/4CAF50/FFFFFF?text=AI+Chatbot+Hub", 
+        st.image("https://www.userlike.com/en/blog/ai-automation-hub", 
                 caption="Your AI Assistant Powered by Google Gemini")
     
     st.markdown("---")
@@ -265,11 +265,9 @@ def render_contact_page():
         
         # Social media links (replace with your actual links)
         st.markdown("""
-        - 🐙 **GitHub**: [Your GitHub Profile](https://github.com/Pruthvirajsinh-Zala)
-        - 💼 **LinkedIn**: [Your LinkedIn Profile](https://linkedin.com/in/yourprofile)
-        - 📧 **Email**: your.email@example.com
-        - 🐦 **Twitter**: [@yourusername](https://twitter.com/yourusername)
-        - 🌐 **Portfolio**: [yourwebsite.com](https://yourwebsite.com)
+        - 🐙 **GitHub**: [Pruthvirajsinh-Zala](https://github.com/Pruthvirajsinh-Zala)
+        - 💼 **LinkedIn**: [Pruthvirajsinh Zala](https://linkedin.com/in/pruthvirajsinh-zala)
+        - 📧 **Email**: prithvirajsinhzala99@gmail.com
         """)
         
         st.markdown("""
