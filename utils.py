@@ -57,7 +57,7 @@ def choose_custom_openai_key():
         st.info("Obtain your key from this link: https://platform.openai.com/account/api-keys")
         st.stop()
 
-    model = "gpt-4.1-mini"
+    model = "gpt-4o-mini"
     try:
         client = openai.OpenAI(api_key=openai_api_key)
         available_models = [{"id": i.id, "created":datetime.fromtimestamp(i.created)} for i in client.models.list() if str(i.id).startswith("gpt")]
@@ -79,7 +79,7 @@ def choose_custom_openai_key():
     return model, openai_api_key
 
 def configure_llm():
-    available_llms = ["gpt-4.1-mini","use your openai api key"]
+    available_llms = ["gpt-4o-mini","use your openai api key"]
     llm_opt = st.sidebar.radio(
         label="LLM",
         options=available_llms,
@@ -87,11 +87,11 @@ def configure_llm():
         )
 
 
-    if llm_opt == "gpt-4.1-mini":
-        llm = ChatOpenAI(model_name=llm_opt, temperature=0, streaming=True, api_key=st.secrets["OPENAI_API_KEY"])
+    if llm_opt == "gpt-4o-mini":
+        llm = ChatOpenAI(model=llm_opt, temperature=0, streaming=True, api_key=st.secrets["OPENAI_API_KEY"])
     else:
         model, openai_api_key = choose_custom_openai_key()
-        llm = ChatOpenAI(model_name=model, temperature=0, streaming=True, api_key=openai_api_key)
+        llm = ChatOpenAI(model=model, temperature=0, streaming=True, api_key=openai_api_key)
     return llm
 
 def print_qa(cls, question, answer):
