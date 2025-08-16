@@ -79,16 +79,15 @@ def choose_custom_openai_key():
     return model, openai_api_key
 
 def configure_llm():
-    available_llms = ["gpt-4.1-mini","llama3.2:3b","use your openai api key"]
+    available_llms = ["gpt-4.1-mini","use your openai api key"]
     llm_opt = st.sidebar.radio(
         label="LLM",
         options=available_llms,
         key="SELECTED_LLM"
         )
 
-    if llm_opt == "llama3.2:3b":
-        llm = ChatOllama(model="llama3.2", base_url=st.secrets["OLLAMA_ENDPOINT"])
-    elif llm_opt == "gpt-4.1-mini":
+
+    if llm_opt == "gpt-4.1-mini":
         llm = ChatOpenAI(model_name=llm_opt, temperature=0, streaming=True, api_key=st.secrets["OPENAI_API_KEY"])
     else:
         model, openai_api_key = choose_custom_openai_key()
