@@ -695,3 +695,13 @@ elif st.session_state.current_page == "About":
     render_about_page()
 elif st.session_state.current_page == "Contact":
     render_contact_page()
+
+# Footer with license information
+st.markdown("---")
+st.markdown("""
+<div style='text-align: center; color: #888; font-size: 0.8em; margin-top: 50px;'>
+    <p><strong>AI Chatbot Hub v3.0</strong></p>
+    <p>© 2025 Pruthvirajsinh-Zala. Licensed under the <a href='https://opensource.org/licenses/MIT' target='_blank'>MIT License</a>.</p>
+    <p>Built with ❤️ using Streamlit and Google Gemini 2.0 Flash</p>
+</div>
+""", unsafe_allow_html=True)
