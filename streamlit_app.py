@@ -57,7 +57,7 @@ def render_home_page():
     
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        st.image("https://www.userlike.com/en/blog/ai-automation-hub", 
+        st.image("assets/ai_chatbot.png", 
                 caption="Your AI Assistant Powered by Google Gemini")
     
     st.markdown("---")
