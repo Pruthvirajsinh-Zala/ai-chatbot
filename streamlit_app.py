@@ -2,6 +2,7 @@ import streamlit as st
 import google.generativeai as genai
 import time
 import random
+import os
 from utils import process_uploaded_file, upload_to_gemini, format_file_size, get_supported_file_types, is_supported_file_type
 
 # Page configuration
@@ -275,7 +276,7 @@ def render_chatbot_page():
     
     # API Configuration (only for chatbot page)
     try:
-        api_key = st.secrets["API_KEY"]
+        api_key = st.secrets["API_KEY"] or os.getenv('API_KEY')
         if api_key == "your-gemini-api-key-here" or not api_key.strip():
             st.warning("⚠️ Please add your actual Gemini API key to .streamlit/secrets.toml")
             st.info("Get your API key from: https://aistudio.google.com/app/apikey")
