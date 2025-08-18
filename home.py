@@ -1,5 +1,6 @@
 import streamlit as st
 
+# Function to render Home page
 def render_home_page():
     st.title("🏠 Welcome to AI Chatbot Hub")
     st.caption("🎉 **Version 3.0** - Now with Advanced File Support & AI Vision!")
