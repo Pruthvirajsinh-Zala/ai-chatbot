@@ -14,8 +14,8 @@ def render_chatbot_page():
     try:
         api_key = st.secrets.get("API_KEY") or os.getenv('API_KEY') or st.session_state.get("API_KEY")
         if not api_key or api_key == "your-gemini-api-key-here" or not api_key.strip():
-            st.error("❌ API_KEY not found in secrets.toml")
-            st.info("You can add your Gemini API key below for this session, or permanently in .streamlit/secrets.toml.")
+            #st.error("❌ API_KEY not found in secrets.toml")
+            st.info("You can add your Gemini API key below for this session")
             user_key = st.text_input("Enter your Gemini API key:", type="password", key="api_key_input")
             if user_key:
                 st.session_state["API_KEY"] = user_key
