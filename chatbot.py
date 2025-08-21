@@ -12,22 +12,22 @@ def render_chatbot_page():
     
     # API Configuration (only for chatbot page)
     try:
-        api_key = st.secrets["API_KEY"] or os.getenv('API_KEY')
-        if api_key == "your-gemini-api-key-here" or not api_key.strip():
-            st.warning("⚠️ Please add your actual Gemini API key to .streamlit/secrets.toml")
+        api_key = st.secrets.get("API_KEY") or os.getenv('API_KEY') or st.session_state.get("API_KEY")
+        if not api_key or api_key == "your-gemini-api-key-here" or not api_key.strip():
+            st.error("❌ API_KEY not found in secrets.toml")
+            st.info("You can add your Gemini API key below for this session, or permanently in .streamlit/secrets.toml.")
+            user_key = st.text_input("Enter your Gemini API key:", type="password", key="api_key_input")
+            if user_key:
+                st.session_state["API_KEY"] = user_key
+                st.success("API key set for this session! Please rerun the page.")
+                st.stop()
             st.info("Get your API key from: https://aistudio.google.com/app/apikey")
             st.stop()
-        
         genai.configure(api_key=api_key)
         st.session_state.app_key = True
-    except KeyError:
-        st.error("❌ API_KEY not found in secrets.toml")
-        st.info("Please add your Gemini API key to .streamlit/secrets.toml")
-        st.info("Get your API key from: https://aistudio.google.com/app/apikey")
-        st.stop()
     except Exception as e:
         st.error(f"❌ Error configuring API: {str(e)}")
-        st.info("Please check your API key in .streamlit/secrets.toml")
+        st.info("Please check your API key in .streamlit/secrets.toml or enter it above.")
         st.stop()
 
     try:
