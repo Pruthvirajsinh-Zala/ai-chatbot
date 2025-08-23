@@ -6,6 +6,7 @@
 [![Google AI](https://img.shields.io/badge/Google%20AI-Gemini%202.0-green.svg)](https://ai.google.dev/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+
 > **A powerful, multi-format file-processing AI chatbot powered by Google's Gemini 2.0 Flash model**
 
 Transform your conversations with an intelligent AI assistant that can analyze documents, process images, and provide contextual insights across multiple file formats.
