@@ -12,6 +12,7 @@
 
 Transform your conversations with an intelligent AI assistant that can analyze documents, process images, and provide contextual insights across multiple file formats.
 
+
 ![AI Chatbot Hub](assets/ai_chatbot.png)
 
 ## ✨ Features
