@@ -18,6 +18,7 @@ Transform your conversations with an intelligent AI assistant that can analyze d
 
 ## ✨ Features
 
+
 ### 🧠 **Advanced AI Capabilities**
 - **Powered by Google Gemini 2.0 Flash** - Latest AI model for superior performance
 - **Real-time streaming responses** - Smooth, natural conversation flow
