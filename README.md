@@ -25,6 +25,7 @@ Transform your conversations with an intelligent AI assistant that can analyze d
 - **Contextual understanding** - Maintains conversation context across interactions
 - **Multi-modal intelligence** - Text, document, and image understanding
 
+
 ### 📁 **Comprehensive File Support**
 | File Type | Extensions | AI Capabilities |
 |-----------|-----------|-----------------|
