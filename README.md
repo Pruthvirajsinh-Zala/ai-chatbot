@@ -38,6 +38,7 @@ Transform your conversations with an intelligent AI assistant that can analyze d
 | 🖼️ **Images** | `.jpg`, `.png`, `.gif` | Visual understanding, content description |
 
 
+
 ### 🎯 **Smart Features**
 - **📱 Responsive Design** - Works seamlessly on desktop and mobile
 - **🔍 Real-time Processing** - Live progress indicators for file uploads
