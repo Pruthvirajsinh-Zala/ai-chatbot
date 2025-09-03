@@ -4,6 +4,7 @@ from chatbot import render_chatbot_page
 from about import render_about_page
 from contact import render_contact_page
 
+
 # Page configuration
 st.set_page_config(
     page_title="AI Chatbot Hub",
