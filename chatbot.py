@@ -31,7 +31,7 @@ def render_chatbot_page():
         st.stop()
 
     try:
-        model = genai.GenerativeModel("gemini-2.0-flash")
+        model = genai.GenerativeModel("gemini-3-pro")
         chat = model.start_chat(history=st.session_state.history)
     except Exception as e:
         st.error(f"❌ Error initializing model: {str(e)}")
