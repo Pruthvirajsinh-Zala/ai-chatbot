@@ -2,7 +2,7 @@ import streamlit as st
 import os
 import random
 import time
-import google.genai as genai
+import google-genai as genai
 from utils import process_uploaded_file
 
 # Function to render Chatbot page
