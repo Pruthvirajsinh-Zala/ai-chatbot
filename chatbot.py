@@ -2,7 +2,8 @@ import streamlit as st
 import os
 import random
 import time
-import google-genai as genai
+from google import genai
+from google.genai import types
 from utils import process_uploaded_file
 
 # Function to render Chatbot page
@@ -11,6 +12,7 @@ def render_chatbot_page():
     st.caption("🤖 Your AI Assistant Powered by Google Gemini 3 Pro")
     
     # API Configuration (only for chatbot page)
+    client = None
     try:
         # Try to get API key from various sources
         api_key = None
@@ -37,16 +39,21 @@ def render_chatbot_page():
             st.info("Get your API key from: https://aistudio.google.com/app/apikey")
             st.stop()
             
-        genai.configure(api_key=api_key)
+        client = genai.Client(api_key=api_key)
         st.session_state.app_key = True
     except Exception as e:
         st.error(f"❌ Error configuring API: {str(e)}")
         st.info("Please check your API key in .streamlit/secrets.toml or enter it above.")
         st.stop()
 
+    chat = None
     try:
-        model = genai.GenerativeModel("gemini-3-pro-preview")
-        chat = model.start_chat(history=st.session_state.history)
+        # Initialize chat with history
+        # Note: We use gemini-2.0-flash as the model
+        if "history" not in st.session_state:
+            st.session_state.history = []
+            
+        chat = client.chats.create(model="gemini-3-pro-preview", history=st.session_state.history)
     except Exception as e:
         st.error(f"❌ Error initializing model: {str(e)}")
         if "API_KEY" in str(e) or "authentication" in str(e).lower():
@@ -55,11 +62,37 @@ def render_chatbot_page():
 
     # Display chat history
     try:
-        for message in chat.history:
-            role = "assistant" if message.role == 'model' else message.role
-            with st.chat_message(role):
-                st.markdown(message.parts[0].text)
+        # In the new SDK, history is a list of Content objects
+        # We iterate through the history stored in session state or the chat object
+        # If we just created the chat, chat.history should reflect st.session_state.history
+        # However, for display, we might want to use the chat.history if it's populated
+        
+        # If st.session_state.history is empty, chat.history is empty.
+        # If st.session_state.history has items, chat.history has them.
+        
+        # We need to handle the case where history items are dicts (from session state persistence) 
+        # vs Content objects (from SDK).
+        # The SDK's chat.history returns Content objects.
+        
+        for message in st.session_state.history:
+            # Handle both dict and object access if necessary, but usually session state keeps what we put in.
+            # If we put Content objects, they stay objects.
+            # Let's assume they are objects or dicts that we can access.
+            
+            role = message.role if hasattr(message, 'role') else message.get('role')
+            parts = message.parts if hasattr(message, 'parts') else message.get('parts')
+            
+            # Map 'model' role to 'assistant' for Streamlit
+            display_role = "assistant" if role == 'model' else role
+            
+            with st.chat_message(display_role):
+                # parts is a list of Part objects or dicts
+                for part in parts:
+                    text = part.text if hasattr(part, 'text') else part.get('text')
+                    if text:
+                        st.markdown(text)
     except Exception as e:
+        # st.error(f"Error displaying history: {e}")
         pass
 
     # File Upload Section
@@ -170,49 +203,66 @@ def render_chatbot_page():
                     full_response = ""
                     
                     # Handle images separately with Gemini Vision
-                    if any(f['is_image'] for f in file_contents):
-                        # For image files, use Gemini Pro Vision model
-                        vision_model = genai.GenerativeModel("gemini-3-pro")
-                        
-                        # Prepare image data
-                        image_parts = []
-                        for file_info in file_contents:
-                            if file_info['is_image']:
-                                image_parts.append(file_info['content'])
-                        
-                        if image_parts:
-                            # Create a message with both text and images
-                            message_parts = [complete_message] + image_parts
-                            response = vision_model.generate_content(message_parts, stream=True)
-                        else:
-                            response = chat.send_message(complete_message, stream=True)
+                    # In the new SDK, we can just pass images in the contents list
+                    
+                    image_parts = []
+                    for file_info in file_contents:
+                        if file_info['is_image']:
+                            # Assuming content is PIL Image or bytes
+                            image_parts.append(file_info['content'])
+                    
+                    response_stream = None
+                    
+                    if image_parts:
+                        # Use client.models.generate_content_stream for multimodal
+                        # We need to construct the contents list correctly
+                        # contents = [text, image1, image2, ...]
+                        contents = [complete_message] + image_parts
+                        response_stream = client.models.generate_content_stream(
+                            model="gemini-3-pro-preview",
+                            contents=contents
+                        )
                     else:
-                        # Regular text-based processing
-                        response = chat.send_message(complete_message, stream=True)
+                        # Regular text-based processing using the chat session
+                        response_stream = chat.send_message_stream(complete_message)
                     
                     # Stream the response
-                    for chunk in response:
+                    for chunk in response_stream:
                         word_count = 0
                         random_int = random.randint(5, 10)
-                        for word in chunk.text:
-                            full_response += word
-                            word_count += 1
-                            if word_count == random_int:
-                                time.sleep(0.05)
-                                message_placeholder.markdown(full_response + "▋")
-                                word_count = 0
-                                random_int = random.randint(5, 10)
+                        
+                        # In new SDK, chunk.text gives the text part
+                        if chunk.text:
+                            for word in chunk.text:
+                                full_response += word
+                                word_count += 1
+                                if word_count == random_int:
+                                    time.sleep(0.05)
+                                    message_placeholder.markdown(full_response + "▋")
+                                    word_count = 0
+                                    random_int = random.randint(5, 10)
                     
                     message_placeholder.markdown(full_response)
-                    st.session_state.history = chat.history
+                    
+                    # Update session state history
+                    # If we used chat.send_message, chat.history is updated automatically.
+                    # If we used client.models.generate_content, we might need to manually update history if we want to keep it in the chat context.
+                    # However, mixing chat and generate_content might be tricky for history.
+                    # For now, we'll just update from chat.history if available.
+                    
+                    if not image_parts:
+                        st.session_state.history = chat.history
+                    else:
+                        # If we used generate_content (stateless), we should probably append to history manually if we want to keep it.
+                        # But the chat object won't know about it unless we add it.
+                        # For simplicity in this migration, we might skip adding multimodal interactions to text chat history 
+                        # or we can try to append it.
+                        pass
                     
                     # Add file processing summary if files were used
                     if file_contents:
                         st.caption(f"✅ Response generated using context from {len(file_contents)} file(s)")
                         
-                except genai.types.generation_types.BlockedPromptException as e:
-                    message_placeholder.markdown("❌ **Content Blocked**: The prompt was blocked due to safety filters.")
-                    st.error("Your message was blocked by content safety filters. Please try rephrasing your question.")
                 except Exception as e:
                     message_placeholder.markdown("❌ **Error**: Failed to get response")
                     error_msg = str(e)
