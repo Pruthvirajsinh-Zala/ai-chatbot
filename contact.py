@@ -42,7 +42,7 @@ def render_contact_page():
         and intelligent conversation management.
         
         #### 🔧 Technologies Used
-        - **AI Model**: Google Gemini 2.0 Flash
+        - **AI Model**: Google Gemini 3 Pro
         - **Framework**: Streamlit
         - **File Processing**: Multiple format support
         - **Interface**: Responsive web design
@@ -52,8 +52,8 @@ def render_contact_page():
         with st.container():
             col_stat1, col_stat2 = st.columns(2)
             with col_stat1:
-                st.metric("AI Model", "🤖 Gemini 2.0", "Latest")
-                st.metric("File Types", "� 8+", "Supported")
+                st.metric("AI Model", "🤖 Gemini 3", "Pro")
+                st.metric("File Types", "📁 8+", "Supported")
             with col_stat2:
                 st.metric("Version", "🔄 3.0", "Current")
                 st.metric("Performance", "⚡ Real-time", "Optimized")

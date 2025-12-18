@@ -84,6 +84,6 @@ if st.session_state.current_page != "Chatbot":
     <div style='text-align: center; color: #888; font-size: 0.8em; margin-top: 50px;'>
         <p><strong>AI Chatbot Hub v3.0</strong></p>
         <p>© 2025 Pruthvirajsinh-Zala. Licensed under the <a href='https://opensource.org/licenses/MIT' target='_blank'>MIT License</a>.</p>
-        <p>Built with ❤️ using Streamlit and Google Gemini 2.0 Flash</p>
+        <p>Built with ❤️ using Streamlit and Google Gemini 3 Pro</p>
     </div>
     """, unsafe_allow_html=True)

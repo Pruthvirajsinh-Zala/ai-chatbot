@@ -11,12 +11,12 @@ def render_about_page():
         ## 🎯 What is AI Chatbot Hub?
         
         AI Chatbot Hub is an intelligent conversational AI application built with **Streamlit** and powered by 
-        **Google's Gemini 2.0 Flash** model. It provides users with a seamless chat experience featuring 
+        **Google's Gemini 3 Pro** model. It provides users with a seamless chat experience featuring 
         real-time streaming responses and an intuitive web interface.
         
         ## 🚀 Key Features
         
-        - **🤖 Advanced AI**: Powered by Google Gemini 2.0 Flash
+        - **🤖 Advanced AI**: Powered by Google Gemini 3 Pro
         - **⚡ Real-time Streaming**: See responses as they're generated
         - **📁 File Support**: Upload and analyze various file formats
         - **🖼️ Image Analysis**: AI-powered image understanding
@@ -37,14 +37,14 @@ def render_about_page():
         ## 🛠️ Technical Stack
         
         - **Frontend**: Streamlit (Python web framework)
-        - **AI Model**: Google Gemini 2.0 Flash with Vision
+        - **AI Model**: Google Gemini 3 Pro with Vision
         - **File Processing**: PyPDF2, python-docx, pandas, Pillow
         - **Language**: Python 3.8+
         - **Deployment**: Streamlit Cloud / Local hosting
         
         ## 📊 Model Capabilities
         
-        The Gemini 2.0 Flash model can help with:
+        The Gemini 3 Pro model can help with:
         - General knowledge questions
         - Creative writing and storytelling
         - Code explanation and debugging
@@ -61,7 +61,7 @@ def render_about_page():
         st.info("🗓️ **Version**: 3.0")
         st.info("📅 **Released**: August 2025")
         st.info("🔧 **Framework**: Streamlit")
-        st.info("🤖 **AI Model**: Gemini 2.0 Flash")
+        st.info("🤖 **AI Model**: Gemini 3 Pro")
         
         st.markdown("### 🌟 Features")
         features = [

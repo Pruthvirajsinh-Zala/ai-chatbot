@@ -67,7 +67,7 @@ def render_home_page():
     with tab4:
         st.markdown("""
         ### 🔧 Technical Improvements
-        - **🧠 Gemini 2.0 Flash**: Latest AI model integration
+        - **🧠 Gemini 3 Pro**: Latest AI model integration
         - **🔍 Computer Vision**: Advanced image processing
         - **📊 Data Processing**: Pandas integration for analytics
         - **🛡️ Error Handling**: Robust error management
@@ -84,7 +84,7 @@ def render_home_page():
     with col1:
         st.markdown("""
         ### 🤖 Smart AI Assistant
-        Powered by Google's latest Gemini 2.0 Flash model for intelligent conversations and file analysis.
+        Powered by Google's latest Gemini 3 Pro model for intelligent conversations and file analysis.
         """)
         
     with col2:
@@ -176,8 +176,8 @@ def render_home_page():
     with col1:
         st.metric(
             label="🤖 AI Model",
-            value="Gemini 2.0",
-            delta="Flash"
+            value="Gemini 3",
+            delta="Pro"
         )
     
     with col2:

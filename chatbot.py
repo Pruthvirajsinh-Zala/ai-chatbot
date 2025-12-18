@@ -8,13 +8,26 @@ from utils import process_uploaded_file
 # Function to render Chatbot page
 def render_chatbot_page():
     st.title("💬 Chat with Gemini")
-    st.caption("🤖 Your AI Assistant Powered by Google Gemini 2.0 Flash")
+    st.caption("🤖 Your AI Assistant Powered by Google Gemini 3 Pro")
     
     # API Configuration (only for chatbot page)
     try:
-        api_key = st.secrets['secrets']['key'] or os.getenv('API_KEY') or st.session_state.get("API_KEY")
+        # Try to get API key from various sources
+        api_key = None
+        # Check for standard Streamlit secrets keys
+        if "API_KEY" in st.secrets:
+            api_key = st.secrets["API_KEY"]
+        elif "GOOGLE_API_KEY" in st.secrets:
+            api_key = st.secrets["GOOGLE_API_KEY"]
+        # Check for nested secrets (as in previous version)
+        elif "secrets" in st.secrets and "key" in st.secrets["secrets"]:
+            api_key = st.secrets["secrets"]["key"]
+            
+        # Check environment variables and session state
+        if not api_key:
+            api_key = os.getenv('API_KEY') or os.getenv('GOOGLE_API_KEY') or st.session_state.get("API_KEY")
+
         if not api_key or api_key == "your-gemini-api-key-here" or not api_key.strip():
-            #st.error("❌ API_KEY not found in secrets.toml")
             st.info("You can add your Gemini API key below for this session")
             user_key = st.text_input("Enter your Gemini API key:", type="password", key="api_key_input")
             if user_key:
@@ -23,6 +36,7 @@ def render_chatbot_page():
                 st.stop()
             st.info("Get your API key from: https://aistudio.google.com/app/apikey")
             st.stop()
+            
         genai.configure(api_key=api_key)
         st.session_state.app_key = True
     except Exception as e:
@@ -31,7 +45,7 @@ def render_chatbot_page():
         st.stop()
 
     try:
-        model = genai.GenerativeModel("gemini-3-pro")
+        model = genai.GenerativeModel("gemini-3-pro-preview")
         chat = model.start_chat(history=st.session_state.history)
     except Exception as e:
         st.error(f"❌ Error initializing model: {str(e)}")
@@ -158,7 +172,7 @@ def render_chatbot_page():
                     # Handle images separately with Gemini Vision
                     if any(f['is_image'] for f in file_contents):
                         # For image files, use Gemini Pro Vision model
-                        vision_model = genai.GenerativeModel("gemini-2.0-flash")
+                        vision_model = genai.GenerativeModel("gemini-3-pro")
                         
                         # Prepare image data
                         image_parts = []

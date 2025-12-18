@@ -2,11 +2,11 @@
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
 [![Streamlit](https://img.shields.io/badge/Streamlit-1.28+-red.svg)](https://streamlit.io)
-[![Google AI](https://img.shields.io/badge/Google%20AI-Gemini%202.0-green.svg)](https://ai.google.dev/)
+[![Google AI](https://img.shields.io/badge/Google%20AI-Gemini%203%20Pro-green.svg)](https://ai.google.dev/)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 
-> **A powerful, multi-format file-processing AI chatbot powered by Google's Gemini 2.0 Flash model**
+> **A powerful, multi-format file-processing AI chatbot powered by Google's Gemini 3 Pro model**
 
 
 Transform your conversations with an intelligent AI assistant that can analyze documents, process images, and provide contextual insights across multiple file formats.
@@ -19,7 +19,7 @@ Transform your conversations with an intelligent AI assistant that can analyze d
 
 
 ### 🧠 **Advanced AI Capabilities**
-- **Powered by Google Gemini 2.0 Flash** - Latest AI model for superior performance
+- **Powered by Google Gemini 3 Pro** - Latest AI model for superior performance
 - **Real-time streaming responses** - Smooth, natural conversation flow
 - **Contextual understanding** - Maintains conversation context across interactions
 - **Multi-modal intelligence** - Text, document, and image understanding
@@ -140,7 +140,7 @@ Connect with the developer and get support.
 ```
 📦 AI Chatbot Hub
 ├── 🎨 Frontend (Streamlit)
-├── 🧠 AI Engine (Google Gemini 2.0 Flash)
+├── 🧠 AI Engine (Google Gemini 3 Pro)
 ├── 📁 File Processors
 │   ├── PDF Handler (PyPDF2)
 │   ├── Document Processor (python-docx)
@@ -228,7 +228,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🌟 Acknowledgments
 
-- **Google AI** for the powerful Gemini 2.0 Flash model
+- **Google AI** for the powerful Gemini 3 Pro model
 - **Streamlit** for the amazing web framework
 - **Open Source Community** for the excellent libraries used in this project
 
