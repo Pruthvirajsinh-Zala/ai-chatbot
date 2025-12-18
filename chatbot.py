@@ -12,7 +12,7 @@ def render_chatbot_page():
     
     # API Configuration (only for chatbot page)
     try:
-        api_key = st.secrets.get['secrets']['key'] or os.getenv('API_KEY') or st.session_state.get("API_KEY")
+        api_key = st.secrets['secrets']['key'] or os.getenv('API_KEY') or st.session_state.get("API_KEY")
         if not api_key or api_key == "your-gemini-api-key-here" or not api_key.strip():
             #st.error("❌ API_KEY not found in secrets.toml")
             st.info("You can add your Gemini API key below for this session")
