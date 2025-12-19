@@ -228,7 +228,7 @@ def render_chatbot_page():
                         # contents = [text, image1, image2, ...]
                         contents = [complete_message] + image_parts
                         response_stream = client.models.generate_content_stream(
-                            model="gemini-3-pro-preview",
+                            model="gemini-3-flash-preview",
                             contents=contents
                         )
                     else:
