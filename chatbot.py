@@ -72,25 +72,34 @@ def render_chatbot_page():
         
         # We need to handle the case where history items are dicts (from session state persistence) 
         # vs Content objects (from SDK).
-        # The SDK's chat.history returns Content objects.
         
         for message in st.session_state.history:
-            # Handle both dict and object access if necessary, but usually session state keeps what we put in.
-            # If we put Content objects, they stay objects.
-            # Let's assume they are objects or dicts that we can access.
+            # Handle both dict and object access
+            role = None
+            parts = []
             
-            role = message.role if hasattr(message, 'role') else message.get('role')
-            parts = message.parts if hasattr(message, 'parts') else message.get('parts')
+            if hasattr(message, 'role'):
+                role = message.role
+                parts = message.parts
+            elif isinstance(message, dict):
+                role = message.get('role')
+                parts = message.get('parts', [])
             
-            # Map 'model' role to 'assistant' for Streamlit
-            display_role = "assistant" if role == 'model' else role
-            
-            with st.chat_message(display_role):
-                # parts is a list of Part objects or dicts
-                for part in parts:
-                    text = part.text if hasattr(part, 'text') else part.get('text')
-                    if text:
-                        st.markdown(text)
+            if role and parts:
+                # Map 'model' role to 'assistant' for Streamlit
+                display_role = "assistant" if role == 'model' else role
+                
+                with st.chat_message(display_role):
+                    # parts is a list of Part objects or dicts
+                    for part in parts:
+                        text = None
+                        if hasattr(part, 'text'):
+                            text = part.text
+                        elif isinstance(part, dict):
+                            text = part.get('text')
+                            
+                        if text:
+                            st.markdown(text)
     except Exception as e:
         # st.error(f"Error displaying history: {e}")
         pass
@@ -245,19 +254,29 @@ def render_chatbot_page():
                     message_placeholder.markdown(full_response)
                     
                     # Update session state history
-                    # If we used chat.send_message, chat.history is updated automatically.
-                    # If we used client.models.generate_content, we might need to manually update history if we want to keep it in the chat context.
-                    # However, mixing chat and generate_content might be tricky for history.
-                    # For now, we'll just update from chat.history if available.
+                    # In the new SDK, chat object might not expose history directly as a property in the same way
+                    # or it might be named differently.
+                    # However, we can manually append the interaction to our session state history.
                     
-                    if not image_parts:
-                        st.session_state.history = chat.history
-                    else:
-                        # If we used generate_content (stateless), we should probably append to history manually if we want to keep it.
-                        # But the chat object won't know about it unless we add it.
-                        # For simplicity in this migration, we might skip adding multimodal interactions to text chat history 
-                        # or we can try to append it.
-                        pass
+                    # Append user message
+                    user_message_content = types.Content(
+                        role="user",
+                        parts=[types.Part(text=complete_message)]
+                    )
+                    # If we had images, we should add them to the user message parts
+                    if image_parts:
+                         # This is a simplification. Reconstructing the exact Content object with images 
+                         # for history storage might require more detailed handling of image data types.
+                         pass
+
+                    # Append model response
+                    model_message_content = types.Content(
+                        role="model",
+                        parts=[types.Part(text=full_response)]
+                    )
+                    
+                    st.session_state.history.append(user_message_content)
+                    st.session_state.history.append(model_message_content)
                     
                     # Add file processing summary if files were used
                     if file_contents:
