@@ -53,7 +53,7 @@ def render_chatbot_page():
         if "history" not in st.session_state:
             st.session_state.history = []
             
-        chat = client.chats.create(model="gemini-2.0-flash", history=st.session_state.history)
+        chat = client.chats.create(model="gemini-2.5-flash", history=st.session_state.history)
     except Exception as e:
         st.error(f"❌ Error initializing model: {str(e)}")
         if "API_KEY" in str(e) or "authentication" in str(e).lower():
